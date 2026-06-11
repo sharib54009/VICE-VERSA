@@ -1,4 +1,5 @@
 const BASE_URL = "https://viceversa-1.onrender.com";
+
 function showTab(tab) {
     document.getElementById('login-form').classList.remove('active');
     document.getElementById('signup-form').classList.remove('active');
@@ -8,53 +9,74 @@ function showTab(tab) {
 
 // LOGIN
 async function login() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
+    try {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
 
-    const res = await fetch(`${BASE_URL}/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    });
+        const res = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    document.getElementById("message").innerText = data.message;
+        document.getElementById("message").innerText = data.message;
 
-    if (data.success) {
-        window.location.href = "app.html";
+        if (data.success) {
+            window.location.href = "app.html";
+        }
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("message").innerText =
+            "Unable to connect to server";
     }
 }
 
 // SIGNUP
 async function signup() {
-    const username = document.getElementById("signup-username").value;
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
+    try {
+        const username = document.getElementById("signup-username").value;
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
 
-    const res = await fetch(`${BASE_URL}/signup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, email, password })
-    });
+        const res = await fetch(`${BASE_URL}/signup`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username,
+                email,
+                password
+            })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    document.getElementById("message").innerText = data.message;
+        document.getElementById("message").innerText = data.message;
 
-    if (data.success) {
-        window.location.href = "app.html";
+        if (data.success) {
+            window.location.href = "app.html";
+        }
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("message").innerText =
+            "Unable to connect to server";
     }
 }
 
 // SPEECH TO TEXT
 function startSpeech() {
     const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
         alert("Speech recognition not supported");
@@ -73,9 +95,11 @@ function startSpeech() {
 
 // TEXT TO SPEECH
 function speakText() {
-    const text = document.getElementById("main-textarea").value;
+    const text =
+        document.getElementById("main-textarea").value;
 
-    const utter = new SpeechSynthesisUtterance(text);
+    const utter =
+        new SpeechSynthesisUtterance(text);
 
     speechSynthesis.speak(utter);
 }
@@ -87,38 +111,56 @@ function clearText() {
 
 // SAVE TEXT
 async function saveText() {
-    const text = document.getElementById("main-textarea").value;
+    try {
+        const text =
+            document.getElementById("main-textarea").value;
 
-    const res = await fetch(`${BASE_URL}/save-text`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text })
-    });
+        const res = await fetch(`${BASE_URL}/save-text`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    alert(data.message);
+        alert(data.message);
+
+    } catch (error) {
+        console.error(error);
+        alert("Unable to save text");
+    }
 }
 
 // LOAD HISTORY
 async function loadHistory() {
-    const res = await fetch(`${BASE_URL}/history`);
+    try {
+        const res = await fetch(`${BASE_URL}/history`, {
+            credentials: 'include'
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    const div = document.getElementById("history-list");
+        const div =
+            document.getElementById("history-list");
 
-    div.innerHTML = data.history.map(i => `
-        <div style="
-            background:#f5f5f5;
-            padding:10px;
-            margin-bottom:10px;
-            border-radius:10px;
-        ">
-            <p>${i.text}</p>
-            <small>${i.timestamp}</small>
-        </div>
-    `).join("");
+        if (!div) return;
+
+        div.innerHTML = data.history.map(i => `
+            <div style="
+                background:#f5f5f5;
+                padding:10px;
+                margin-bottom:10px;
+                border-radius:10px;
+            ">
+                <p>${i.text}</p>
+                <small>${i.timestamp}</small>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error(error);
+    }
 }
