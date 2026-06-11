@@ -27,8 +27,7 @@ async function login() {
         document.getElementById("message").innerText = data.message;
 
         if (data.success) {
-            window.location.href = "app.html";
-        }
+            window.location.href = `${BASE_URL}/app`;}
 
     } catch (error) {
         console.error(error);
