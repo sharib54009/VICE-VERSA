@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ViceVersa App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="auth-container">
+    <div class="auth-card">
+
+        <h1>Welcome {{ username }}</h1>
+        <p>Vice ↔ Text Magic</p>
+
+        <textarea
+            id="main-textarea"
+            placeholder="Type or speak here..."
+            rows="8"
+            style="width:100%; margin-top:20px;"
+        ></textarea>
+
+        <br><br>
+
+        <button onclick="startSpeech()" class="auth-btn">
+            🎤 Speech To Text
+        </button>
+
+        <button onclick="speakText()" class="auth-btn">
+            🔊 Speak Text
+        </button>
+
+        <button onclick="saveText()" class="auth-btn">
+            💾 Save
+        </button>
+
+        <button onclick="clearText()" class="auth-btn">
+            🗑 Clear
+        </button>
+
+        <br><br>
+
+        <h3>History</h3>
+
+        <div id="history-list"></div>
+
+        <br>
+
+        <a href="index.html">
+            <button class="auth-btn">Logout</button>
+        </a>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+loadHistory();
+</script>
+
+</body>
+</html>

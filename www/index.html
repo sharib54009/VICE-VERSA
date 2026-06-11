@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ViceVersa Auth</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="logo">
+            <h1>ViceVersa</h1>
+            <p>Voice ↔ Text Magic</p>
+        </div>
+
+        <div class="auth-tabs">
+            <button onclick="showTab('login')" class="tab-btn">Login</button>
+            <button onclick="showTab('signup')" class="tab-btn">Sign Up</button>
+        </div>
+
+        <div id="login-form" class="auth-form active">
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="login()" class="auth-btn">Login</button>
+        </div>
+
+        <div id="signup-form" class="auth-form">
+            <input type="text" id="signup-username" placeholder="Username">
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Password">
+            <button onclick="signup()" class="auth-btn">Create Account</button>
+        </div>
+
+        <div id="message"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
