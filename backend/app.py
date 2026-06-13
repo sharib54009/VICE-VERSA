@@ -1,23 +1,44 @@
+import os
 from flask import Flask, render_template, request, jsonify, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from models import db, User, TextHistory
-
-from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
 
-app.config['SECRET_KEY'] = 'viceversa-secret'
+# Configuration from environment with sensible defaults for local dev
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'viceversa-secret')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///viceversa.db'
+# Prefer DATABASE_URL (e.g. from Render). Fallback to local file in instance folder.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL',
+    'sqlite:///instance/viceversa.db'
+)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Session cookie security for production (set via env when deploying)
+if os.environ.get('FLASK_ENV') == 'production' or os.environ.get('PORT'):
+    app.config['SESSION_COOKIE_SECURE'] = True
+    # For cross-site requests (e.g. external frontends) set to 'None'
+    app.config['SESSION_COOKIE_SAMESITE'] = os.environ.get('SESSION_COOKIE_SAMESITE', 'Lax')
+
+# CORS: allow credentials; set CORS_ORIGINS env to restrict origins in production
+cors_origins = os.environ.get('CORS_ORIGINS')
+if cors_origins:
+    CORS(app, supports_credentials=True, origins=cors_origins.split(','))
+else:
+    CORS(app, supports_credentials=True)
 
 db.init_app(app)
 
 with app.app_context():
+    # Ensure instance folder exists for sqlite
+    try:
+        os.makedirs(app.instance_path, exist_ok=True)
+    except Exception:
+        pass
     db.create_all()
 
 
@@ -217,5 +238,6 @@ def history():
 # ---------------- RUN ---------------- #
 
 if __name__ == '__main__':
-
-   app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(host='0.0.0.0', port=port, debug=debug)

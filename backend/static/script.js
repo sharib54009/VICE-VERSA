@@ -1,4 +1,5 @@
-const BASE_URL = "http://127.0.0.1:5000";
+// Use relative URLs so the frontend served by Flask talks to the same origin.
+const BASE_URL = "";
 // ---------------- TAB SWITCH ---------------- //
 
 function showTab(tab) {
@@ -27,13 +28,11 @@ async function login() {
     try {
 
         const res = await fetch(`${BASE_URL}/login`, {
-
             method: 'POST',
-
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-
             body: JSON.stringify({
                 email,
                 password
@@ -75,13 +74,11 @@ async function signup() {
     try {
 
         const res = await fetch(`${BASE_URL}/signup`, {
-
             method: 'POST',
-
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-
             body: JSON.stringify({
                 username,
                 email,
@@ -166,13 +163,11 @@ async function saveText() {
     try {
 
         const res = await fetch(`${BASE_URL}/save-text`, {
-
             method: 'POST',
-
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-
             body: JSON.stringify({
                 text
             })
@@ -195,7 +190,7 @@ async function loadHistory() {
 
     try {
 
-        const res = await fetch(`${BASE_URL}/history`);
+        const res = await fetch(`${BASE_URL}/history`, { credentials: 'include' });
 
         const data = await res.json();
 
