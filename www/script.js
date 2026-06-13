@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:5000";
+const BASE_URL = "https://vice-versa.onrender.com";
 
 function showTab(tab) {
     document.getElementById('login-form').classList.remove('active');

@@ -1,5 +1,5 @@
-// Use relative URLs so the frontend served by Flask talks to the same origin.
-const BASE_URL = "";
+// Production backend URL
+const BASE_URL = "https://vice-versa.onrender.com";
 // ---------------- TAB SWITCH ---------------- //
 
 function showTab(tab) {
